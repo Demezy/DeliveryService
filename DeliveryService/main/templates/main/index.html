@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+
+{% block title%}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+    <h1>Home page</h1>
+    <p>Home text</p>
+    <a class="p-2 text-dark" href="{% url 'test_page' %}">test link</a>
+{% endblock %}
