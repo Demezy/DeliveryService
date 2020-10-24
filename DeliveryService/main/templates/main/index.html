@@ -5,7 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Home page</h1>
-    <p>Home text</p>
-    <a class="p-2 text-dark" href="{% url 'test_page' %}">test link</a>
+<h1>Link page</h1>
+<p>I use it only for develop</p>
+
+<a class="p-3" href="{% url 'test_page' %}">test link</a>
+<a class="p-3" href="admin">ADMIN PANEL</a>
+<a class="p-3" href="{% url 'shop_page'%}">Shop page</a>
 {% endblock %}
