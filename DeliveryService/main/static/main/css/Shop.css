@@ -2,8 +2,10 @@
   padding-top: 3rem;
   padding-bottom: 3rem;
   margin-bottom: 0;
-  background-color: #fff;
+  /* background-color: rgba(117,117,117,1); */
+  background-color: rgba(56,56,56,1);
 }
+
 @media (min-width: 768px) {
   .jumbotron {
     padding-top: 6rem;
@@ -30,4 +32,8 @@ footer {
 
 footer p {
   margin-bottom: .25rem;
+}
+
+.card{
+  background-color: rgba(28,28,28,1);
 }

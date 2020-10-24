@@ -3,3 +3,6 @@ body{
   color: white;
 }
 /* #4f4ff4 */
+div.navbar-dark, div.dark {
+  background-color: rgba(36,36,36,1);
+}

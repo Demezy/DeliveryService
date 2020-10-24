@@ -22,4 +22,4 @@ def test_page(request):
 
 
 def manage_page(request):
-    return render(request, "main/manage_page.html")
+    return render(request, "main/manage_page.html", {"COMPANY": COMPANY})
