@@ -22,7 +22,9 @@
     }
   }
 </style>
-<link href="test.css" rel="stylesheet">
+<!--<link href="test.css" rel="stylesheet">-->
+{% load static %}
+<link rel="stylesheet" href="{% static 'main/css/Shop.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -51,12 +53,11 @@
     </div>
   </div>
 
-
+<!-- TODO: transfer header to base.html -->
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container d-flex justify-content-between">
       <a href="#" class="navbar-brand d-flex align-items-center">
-        <!-- camera -->
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="mr-2" viewBox="0 0 24 24" focusable="false">
+        <img src="{% static 'main/svg/home.svg' %}" alt="home" style="width: 2vw; min-width: 20px">
           <circle cx="12" cy="13" r="4"></circle>
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
         </svg>

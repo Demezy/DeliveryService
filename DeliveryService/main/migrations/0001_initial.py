@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('username', models.CharField(max_length=100, unique=True, verbose_name='username')),
                 ('email', models.CharField(blank=True, max_length=100, verbose_name='email')),
                 ('password', models.TextField(blank=True, verbose_name='password')),
-                ('invitation_code', models.TextField(default=main.models.key_gen, verbose_name='invitation_code')),
+                ('invitation_code', models.TextField(default=main.models.pass_gen, verbose_name='invitation_code')),
             ],
         ),
     ]

@@ -5,8 +5,9 @@ from hashlib import sha256
 # these symbols are used to generate passwords
 CHARS = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
+
 # TODO: rename keygen to pass_gen
-def key_gen() -> str:
+def pass_gen() -> str:
     return "".join([random.choice(CHARS) for i in range(10)])
 
 
@@ -15,7 +16,7 @@ class User(models.Model):
     username = models.CharField('username', max_length=100, unique=True)
     email = models.CharField('email', max_length=100, blank=True)
     password = models.TextField('password', blank=True)
-    invitation_code = models.TextField('invitation_code', default=key_gen)
+    invitation_code = models.TextField('invitation_code', default=pass_gen)
 
     def __str__(self):
         return f'Name: {self.username}{" " * 4}Email:{self.email}{" " * 4}UserType:{self.invitation_code}'
