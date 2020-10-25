@@ -1,0 +1,45 @@
+{% extends "main/base.html" %}
+
+{% block title%}{{ title }}{% endblock %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'main/css/manage_page.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <form class="" action="index.html" method="post">
+    <!-- TODO: configure form and select -->
+    {% for el in orders %}
+    <div class="row">
+      <div class="col">
+        {{ el.status }}
+      </div>
+      <div class="col">
+        {{ el.district }}
+      </div>
+      <div class="col">
+        {{ el.address }}
+      </div>
+      <div class="col">
+        {{ el.phone }}
+      </div>
+      <select id="inputState" class="form-control" style="width: 20%;">
+        <option value="" disabled selected hidden>Choose courier</option>
+        <!-- {% for courier in %} -->
+        <!-- TODO: courier select -->
+        <option>1</option>
+        <option>2
+        <option>
+          <!-- {% endfor %} -->
+      </select>
+    </div>
+    {% endfor %}
+    <!-- TODO: form handler -->
+
+  </form>
+
+</div>
+{% endblock %}
