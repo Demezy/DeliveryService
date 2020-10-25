@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import User, Product
+from .models import Product, Order, Manager, Courier
 
 # constants
 COMPANY = "Delivery Service"
@@ -21,5 +22,8 @@ def test_page(request):
                   {"title": "TEST PAGE!", "products": Product.objects.all(), "COMPANY": COMPANY})
 
 
+# @login_required(login_url="login")
 def manage_page(request):
-    return render(request, "main/manage_page.html", {"COMPANY": COMPANY})
+    return render(request, "main/manage_page.html", {"COMPANY": COMPANY,
+                                                     "orders": Order.objects.all()
+                                                     })
