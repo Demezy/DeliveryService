@@ -1,45 +1,67 @@
 {% extends "main/base.html" %}
+{% load static %}
 
 {% block title%}{{ title }}{% endblock %}
 
 
 {% block head %}
+
 <link rel="stylesheet" href="{% static 'main/css/manage_page.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container">
 
-  <form class="" action="index.html" method="post">
+
+  <form class="" action="index.html" method="post" , class="container">
     <!-- TODO: configure form and select -->
-    {% for el in orders %}
+    <!-- TODO: submit button -->
     <div class="row">
-      <div class="col">
+      <div class="col data d-title">
+        status
+      </div>
+      <div class="col data d-title">
+        district
+      </div>
+      <div class="col data d-title">
+        address
+      </div>
+      <div class="col data d-title">
+        phone
+      </div>
+      <div class="col data d-title">
+        courier
+      </div>
+      {% if orders %}
+      {% for el in orders %}
+      <div class="w-100"></div>
+      <div class="col data">
         {{ el.status }}
       </div>
-      <div class="col">
+      <div class="col data">
         {{ el.district }}
       </div>
-      <div class="col">
+      <div class="col data">
         {{ el.address }}
       </div>
-      <div class="col">
+      <div class="col data">
         {{ el.phone }}
       </div>
-      <select id="inputState" class="form-control" style="width: 20%;">
-        <option value="" disabled selected hidden>Choose courier</option>
-        <!-- {% for courier in %} -->
-        <!-- TODO: courier select -->
-        <option>1</option>
-        <option>2
-        <option>
-          <!-- {% endfor %} -->
-      </select>
-    </div>
-    {% endfor %}
-    <!-- TODO: form handler -->
-
+      <div class="col data">
+        <select id="inputState" class="form-control">
+          <option value="" disabled selected hidden>Choose courier</option>
+          <!-- % for courier in % -->
+          <!-- TODO: courier select -->
+          <option>courier 1</option>
+          <option>courier 2</option>
+          <!-- % endfor % -->
+        </select>
+      </div>
+      {% endfor %}
+      <!-- TODO: form handler -->
   </form>
-
+  {% else %}
+  <div class="text-center" style="font-size: 2.5em;">No one order yet</div>
+  {% endif %}
 </div>
 {% endblock %}
