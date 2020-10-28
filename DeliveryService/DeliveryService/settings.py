@@ -24,7 +24,8 @@ SECRET_KEY = 'unx#2$9+y)bykco56liwetr(exv^_+=_3am*)5ae$v_y(p#__!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# TODO: make validation for hosts
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 

@@ -1,29 +1,117 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from .models import Product, Order, Manager, Courier
+# from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import Product, Order, User
+from .decorators import check_session, login_required
+from hashlib import sha256
 
 # constants
 COMPANY = "Delivery Service"
 
 
+@check_session
 def index(request):
-    # return HttpResponse("<h1> Index page </h1>")
-    # data = User.objects.get(id=1) # example
-    return render(request, "main/index.html", {"title": "LinkPage", "COMPANY": COMPANY})
-    # return render(request, "main/index.html", {"products": Product.objects.all(), "COMPANY": COMPANY})
+    try:
+        return render(request, "main/index.html", {"title": "LinkPage", "COMPANY": COMPANY})
+    except Exception:
+        return error(request)
 
 
+@check_session
 def shop_page(request):
-    return render(request, "main/Shop.html", {"title": "Shop", "products": Product.objects.all(), "COMPANY": COMPANY})
+    try:
+        return render(request, "main/Shop.html",
+                      {"title": "Shop", "products": Product.objects.all(), "COMPANY": COMPANY})
+    except Exception:
+        return error(request)
 
 
-def test_page(request):
-    return render(request, "main/test.html",
-                  {"title": "TEST PAGE!", "products": Product.objects.all(), "COMPANY": COMPANY})
+@check_session
+def test_page(request, num=0):
+    try:
+        return render(request, "main/test.html",
+                      {"title": "TEST PAGE!",
+                       # "products": Product.objects.all(),
+                       "COMPANY": COMPANY})
+
+    except Exception:
+        return error(request)
 
 
-# @login_required(login_url="login")
-def manage_page(request):
-    return render(request, "main/manage_page.html", {"COMPANY": COMPANY,
-                                                     "orders": Order.objects.all()
-                                                     })
+@check_session
+def login(request):
+    try:
+        if request.method == 'GET':
+            params = {
+                'auth': request.session['auth'],
+            }
+            return render(request, 'main/login.html', params)
+        else:
+            login = request.POST['login']
+            password_hash = sha256(bytes(request.POST['password'], 'utf-8')).hexdigest()
+            # TODO: save hash in DB
+            try:
+
+                user = User.objects.get(username=login)
+            except Exception as e:
+                print(e)
+                params = {
+                    'error': 'Failed to authenticate'
+                }
+                return render(request, 'main/login.html', params)
+            else:
+                if password_hash == user.password:
+                    request.session['auth'] = 1
+                    request.session['username'] = user.username
+                    return redirect('home')
+                else:
+                    params = {
+                        'error': 'Failed to authenticate',
+                    }
+                    return render(request, 'main/login.html', params)
+    except Exception:
+        return error(request, e)
+
+
+@check_session
+def error(request, error_msg=None):
+    return render(request, "main/error.html", {"COMPANY": COMPANY, "error_msg": error_msg})
+
+
+@check_session
+def logout(request):
+    try:
+        request.session['auth'] = 0
+        return redirect('login')
+    except Exception:
+        return error(request)
+
+
+@check_session
+@login_required
+def show_page(user, request, number=None):
+    try:
+        if user.district is None:
+            return render(request, "main/manage_page.html", {"COMPANY": COMPANY,
+                                                             "orders": Order.objects.all()})
+
+        elif user.district:
+            if number is None:
+
+                return render(request,
+                              "main/courier.html",
+                              {"COMPANY": COMPANY,
+                               "title": "courier",
+                               "orders": Order.objects.filter(courier=user)})
+            else:
+                return render(request, "main/courier.html", {
+                    "title": "courier",
+                    "COMPANY": COMPANY,
+                    "orders": Order.objects.filter(courier=user, id=int(number)),
+
+                })
+
+        else:
+            return error(request)
+
+    except Exception as e:
+        return error(request, e)
