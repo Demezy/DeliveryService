@@ -1,12 +1,18 @@
 {% extends "main/base.html" %}
+{% load static %}
 
 {% block title %}
 {{ title }}
 {% endblock %}
 
+{% block head%}
+<link rel="stylesheet" href="{% static 'main/css/grid_styles.css' %}">
+{% endblock %}
 
 {% block content %}
+
 <div class="container">
+    <h2 class="text-center">Orders</h2>
     <div class="row">
         {% if orders %}
         <div class="col data d-title">
@@ -21,19 +27,22 @@
         <div class="col data d-title">
             details
         </div>
-        {% for el in orders %}
+        {% for order in orders %}
         <div class="w-100"></div>
         <div class="col data">
-            {{ el.address }}
+            {{ order.address }}
         </div>
         <div class="col data">
-            {{ el.phone }}
+            {{ order.phone }}
         </div>
         <div class="col data">
-            {{ el.status }}
+            {{ order.status }}
         </div>
-        <div class="col data">
-            <a href="{% url 'courier' %}/{{ el.id }}">View details</a>
+        <div class="col data bg-secondary">
+            <div class="p-0 m-0">
+                <a href="{% url 'courier' %}/{{ order.id }}" class="btn btn-secondary w-100">View details</a>
+            </div>
+
         </div>
         {% endfor %}
     </div>

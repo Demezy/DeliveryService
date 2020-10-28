@@ -1,0 +1,65 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static 'main/css/grid_styles.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class="text-center">Order № {{order.id}}</h2>
+    <div class="row">
+        {% if order %}
+        <div class="col data d-title">
+            address
+        </div>
+        <div class="col data">
+            {{ order.address }}
+        </div>
+        <div class="w-100"></div>
+        <div class="col data d-title">
+            phone
+        </div>
+        <div class="col data">
+            {{ order.phone }}
+        </div>
+        <div class="w-100"></div>
+        <div class="col data d-title">
+            current status
+        </div>
+        <div class="col data">
+            {{ order.status }}
+        </div>
+        <div class="w-100"></div>
+    </div>
+
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col data">
+                <select name="update_status" class="form-control text-light" style="background: none;">
+                    <option value="" disabled selected hidden>Choose status</option>
+                    {% for num, text in STATUSES %}
+                    {% if num > order.status %}
+                    <option value="{{ num }}">{{ text }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col data">
+                <button class="btn btn-success" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+{% else %}
+<div class="text-center container" style="font-size: 2.5em;">Information is not available</div>
+{% endif %}
+{% endblock %}

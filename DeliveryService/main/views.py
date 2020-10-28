@@ -86,55 +86,66 @@ def logout(request):
         return error(request)
 
 
-def manager(request):
+def manager(request, number):
     """manager handler"""
     if request.method == "POST":
-        # print(request.POST, "#" * 15)
-        for key in request.POST:
-            # print(key)
-            if key == 'csrfmiddlewaretoken':
-                continue
-            else:
-                val = request.POST.get(key)
-                current = Order.objects.get(id=int(key))
-                current.courier = User.objects.get(username=val)
-                current.save()
+        current = Order.objects.get(id=int(number))
+        if request.POST.get("status_upd"):
+            current.status = int(request.POST.get("status_upd"))
+
+        if request.POST.get("courier_upd"):
+            current.courier = User.objects.get(username=request.POST.get("courier_upd"))
+        current.save()
 
     return render(request, "main/manage_page.html",
                   {"COMPANY": COMPANY,
                    "orders": Order.objects.all(),
-                   "couriers": User.objects.filter(user_type=0)
+                   "couriers": User.objects.filter(user_type=0),
+                   "STATUSES": Order.STATUS_CHOICES
                    })
 
 
 def courier(request, user, number):
     """courier handler"""
-    if number is None:
+    if request.method == "POST":
+        # validation
+        order = Order.objects.get(courier=user, id=int(number))
 
+        if order:
+            print(order)
+            order.status = int(request.POST.get("update_status"))
+            print(order)
+            order.save()
+        else:
+            return error(request, "It isn't your order!")
+
+    if number is None:
         return render(request,
                       "main/courier.html",
                       {"COMPANY": COMPANY,
                        "title": "courier",
                        "orders": Order.objects.filter(courier=user)})
-    else:
-        return render(request, "main/courier.html", {
-            "title": "courier",
-            "COMPANY": COMPANY,
-            "orders": Order.objects.filter(courier=user, id=int(number)),  # verification of courier's order
 
-        })
+    return render(request, "main/product_page.html", {
+        "title": "courier",
+        "COMPANY": COMPANY,
+        "order": Order.objects.get(courier=user, id=int(number)),
+        "STATUSES": Order.STATUS_CHOICES
+        # verification is this order belong to this courier
+
+    })
 
 
 @check_session
 @login_required
 def show_page(user: User, request, number=None):
-    # try:
-    if user.user_type == 1:
-        return manager(request)
-    elif user.user_type == 0:
-        return courier(request, user, number)
-    else:
-        return error(request, "The administrator assigned you the wrong user type. ")
+    try:
+        if user.user_type == 1:
+            return manager(request, number)
+        elif user.user_type == 0:
+            return courier(request, user, number)
+        else:
+            return error(request, "The administrator assigned you the wrong user type. ")
 
-    # except Exception as e:
-    #     return error(request, e)
+    except Exception:
+        return error(request)

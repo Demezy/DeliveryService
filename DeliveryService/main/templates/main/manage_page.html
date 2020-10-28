@@ -13,61 +13,76 @@
 <div class="container">
 
 
-    <form action="" method="post" class="container">
-        {% csrf_token %}
-        <div class="text-center">
-            <button class="btn btn-success" type="submit">Submit</button>
+    <div class="row">
+        {% if orders %}
+        <div class="col data d-title">
+            Submit
+        </div>
+        <div class="col data d-title">
+            status
+        </div>
+        <div class="col data d-title">
+            district
+        </div>
+        <div class="col data d-title">
+            address
+        </div>
+        <div class="col data d-title">
+            phone
+        </div>
+        <div class="col data d-title">
+            courier
         </div>
 
-        <div class="row">
-            {% if orders %}
-            <div class="col data d-title">
-                status
-            </div>
-            <div class="col data d-title">
-                district
-            </div>
-            <div class="col data d-title">
-                address
-            </div>
-            <div class="col data d-title">
-                phone
-            </div>
-            <div class="col data d-title">
-                courier
-            </div>
-            {% for order in orders %}
-            <div class="w-100"></div>
-            <div class="col data">
-                {{ order.status }}
-            </div>
-            <div class="col data">
-                {{ order.district }}
-            </div>
-            <div class="col data">
-                {{ order.address }}
-            </div>
-            <div class="col data">
-                {{ order.phone }}
-            </div>
-            <div class="col data">
-                {% if order.courier == None %}
-                <select id="inputState" name="{{order.id}}" class="form-control text-secondary"
-                        style="background: none">
-                    <option value="" disabled selected hidden>Choose courier</option>
-                    {% for courier in couriers %}
-                    {% if courier.district == order.district or courier.district == 0%}
-                    <option value="{{courier.username}}">{{courier.username}}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-                {% else %}
-                {{order.courier.username}}
-                {% endif %}
-            </div>
-            {% endfor %}
+    </div>
+
+    {% for order in orders %}
+    <form action="{% url 'manage_page' %}/{{order.id}}" method="post" class="row">
+        {% csrf_token %}
+        <div class="col data text-center bg-success">
+            <button class="btn btn-success w-100" type="submit">{{order.id}}</button>
         </div>
+
+        <div class="col data">
+            <select name="status_upd" class="form-control text-light" style="background: none;">
+                {% for num, text in STATUSES %}
+                {% if num != order.status %}
+                <option value="{{ num }}">{{ text }}</option>
+                {% else %}
+                <option value="{{ num }}" selected>{{ text }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col data">
+            {{ order.district }}
+        </div>
+        <div class="col data">
+            {{ order.address }}
+        </div>
+        <div class="col data">
+            {{ order.phone }}
+        </div>
+        <div class="col data">
+            {% if order.courier == None %}
+            <select id="inputState" name="courier_upd" class="form-control text-secondary"
+                    style="background: none">
+                <option value="" disabled selected hidden>Choose courier</option>
+                {% for courier in couriers %}
+                {% if courier.district == order.district or courier.district == 0%}
+                <option value="{{courier.username}}">{{courier.username}}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+            {% else %}
+            {{order.courier.username}}
+            {% endif %}
+        </div>
+
     </form>
+    {% endfor %}
+
+
     {% else %}
     <div class="text-center container" style="font-size: 2.5em;">No one order yet</div>
     {% endif %}
