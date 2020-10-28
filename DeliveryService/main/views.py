@@ -53,7 +53,7 @@ def login(request):
 
                 user = User.objects.get(username=login)
             except Exception as e:
-                print(e)
+                # print(e)
                 params = {
                     'error': 'Failed to authenticate'
                 }
@@ -69,7 +69,7 @@ def login(request):
                     }
                     return render(request, 'main/login.html', params)
     except Exception:
-        return error(request, e)
+        return error(request)
 
 
 @check_session
@@ -86,32 +86,55 @@ def logout(request):
         return error(request)
 
 
+def manager(request):
+    """manager handler"""
+    if request.method == "POST":
+        # print(request.POST, "#" * 15)
+        for key in request.POST:
+            # print(key)
+            if key == 'csrfmiddlewaretoken':
+                continue
+            else:
+                val = request.POST.get(key)
+                current = Order.objects.get(id=int(key))
+                current.courier = User.objects.get(username=val)
+                current.save()
+
+    return render(request, "main/manage_page.html",
+                  {"COMPANY": COMPANY,
+                   "orders": Order.objects.all(),
+                   "couriers": User.objects.filter(user_type=0)
+                   })
+
+
+def courier(request, user, number):
+    """courier handler"""
+    if number is None:
+
+        return render(request,
+                      "main/courier.html",
+                      {"COMPANY": COMPANY,
+                       "title": "courier",
+                       "orders": Order.objects.filter(courier=user)})
+    else:
+        return render(request, "main/courier.html", {
+            "title": "courier",
+            "COMPANY": COMPANY,
+            "orders": Order.objects.filter(courier=user, id=int(number)),  # verification of courier's order
+
+        })
+
+
 @check_session
 @login_required
-def show_page(user, request, number=None):
-    try:
-        if user.district is None:
-            return render(request, "main/manage_page.html", {"COMPANY": COMPANY,
-                                                             "orders": Order.objects.all()})
+def show_page(user: User, request, number=None):
+    # try:
+    if user.user_type == 1:
+        return manager(request)
+    elif user.user_type == 0:
+        return courier(request, user, number)
+    else:
+        return error(request, "The administrator assigned you the wrong user type. ")
 
-        elif user.district:
-            if number is None:
-
-                return render(request,
-                              "main/courier.html",
-                              {"COMPANY": COMPANY,
-                               "title": "courier",
-                               "orders": Order.objects.filter(courier=user)})
-            else:
-                return render(request, "main/courier.html", {
-                    "title": "courier",
-                    "COMPANY": COMPANY,
-                    "orders": Order.objects.filter(courier=user, id=int(number)),
-
-                })
-
-        else:
-            return error(request)
-
-    except Exception as e:
-        return error(request, e)
+    # except Exception as e:
+    #     return error(request, e)

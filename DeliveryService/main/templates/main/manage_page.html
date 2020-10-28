@@ -6,7 +6,7 @@
 
 {% block head %}
 
-<link rel="stylesheet" href="{% static 'main/css/manage_page.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/grid_styles.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -14,8 +14,11 @@
 
 
     <form action="" method="post" class="container">
-        <!-- TODO: configure form and select -->
-        <!-- TODO: submit button -->
+        {% csrf_token %}
+        <div class="text-center">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+
         <div class="row">
             {% if orders %}
             <div class="col data d-title">
@@ -33,32 +36,36 @@
             <div class="col data d-title">
                 courier
             </div>
-            {% for el in orders %}
+            {% for order in orders %}
             <div class="w-100"></div>
             <div class="col data">
-                {{ el.status }}
+                {{ order.status }}
             </div>
             <div class="col data">
-                {{ el.district }}
+                {{ order.district }}
             </div>
             <div class="col data">
-                {{ el.address }}
+                {{ order.address }}
             </div>
             <div class="col data">
-                {{ el.phone }}
+                {{ order.phone }}
             </div>
             <div class="col data">
-                <select id="inputState" class="form-control">
+                {% if order.courier == None %}
+                <select id="inputState" name="{{order.id}}" class="form-control text-secondary"
+                        style="background: none">
                     <option value="" disabled selected hidden>Choose courier</option>
-                    <!-- % for courier in % -->
-                    <!-- TODO: courier select -->
-                    <option>courier 1</option>
-                    <option>courier 2</option>
-                    <!-- % endfor % -->
+                    {% for courier in couriers %}
+                    {% if courier.district == order.district or courier.district == 0%}
+                    <option value="{{courier.username}}">{{courier.username}}</option>
+                    {% endif %}
+                    {% endfor %}
                 </select>
+                {% else %}
+                {{order.courier.username}}
+                {% endif %}
             </div>
             {% endfor %}
-            <!-- TODO: form handler -->
         </div>
     </form>
     {% else %}

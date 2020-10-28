@@ -10,6 +10,11 @@ class User(models.Model):
     username = models.CharField('username', max_length=100, unique=True)
     password = models.TextField('password')
     district = models.PositiveIntegerField("district", null=True, default=None, blank=True)
+    USER_TYPES = (
+        (0, "Courier"),
+        (1, "Manager"),
+    )
+    user_type = models.PositiveIntegerField("type", default=0, choices=USER_TYPES)
 
     def __str__(self):
         return f"{self.username} district: {self.district}"
