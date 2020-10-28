@@ -1,0 +1,22 @@
+{% extends "main/base.html" %}
+
+{% block title%}{{ title }}{% endblock %}
+
+
+{% block head %}
+{% endblock %}
+
+
+{% block content %}
+<div class="container text-center">
+    <span class="text-center" style="
+    color:yellow;
+    /*text-align: center;*/
+    font-size: 2em;
+">Something went wrong</span>
+    <p class="text-center">Maybe you haven't access to this page?</p>
+    {% if error_msg %}
+    <p>{{error_msg}}</p>
+    {% endif %}
+    {% endblock %}
+</div>

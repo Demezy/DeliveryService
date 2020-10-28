@@ -13,55 +13,56 @@
 <div class="container">
 
 
-  <form class="" action="index.html" method="post" , class="container">
-    <!-- TODO: configure form and select -->
-    <!-- TODO: submit button -->
-    <div class="row">
-      <div class="col data d-title">
-        status
-      </div>
-      <div class="col data d-title">
-        district
-      </div>
-      <div class="col data d-title">
-        address
-      </div>
-      <div class="col data d-title">
-        phone
-      </div>
-      <div class="col data d-title">
-        courier
-      </div>
-      {% if orders %}
-      {% for el in orders %}
-      <div class="w-100"></div>
-      <div class="col data">
-        {{ el.status }}
-      </div>
-      <div class="col data">
-        {{ el.district }}
-      </div>
-      <div class="col data">
-        {{ el.address }}
-      </div>
-      <div class="col data">
-        {{ el.phone }}
-      </div>
-      <div class="col data">
-        <select id="inputState" class="form-control">
-          <option value="" disabled selected hidden>Choose courier</option>
-          <!-- % for courier in % -->
-          <!-- TODO: courier select -->
-          <option>courier 1</option>
-          <option>courier 2</option>
-          <!-- % endfor % -->
-        </select>
-      </div>
-      {% endfor %}
-      <!-- TODO: form handler -->
-  </form>
-  {% else %}
-  <div class="text-center" style="font-size: 2.5em;">No one order yet</div>
-  {% endif %}
+    <form action="" method="post" class="container">
+        <!-- TODO: configure form and select -->
+        <!-- TODO: submit button -->
+        <div class="row">
+            {% if orders %}
+            <div class="col data d-title">
+                status
+            </div>
+            <div class="col data d-title">
+                district
+            </div>
+            <div class="col data d-title">
+                address
+            </div>
+            <div class="col data d-title">
+                phone
+            </div>
+            <div class="col data d-title">
+                courier
+            </div>
+            {% for el in orders %}
+            <div class="w-100"></div>
+            <div class="col data">
+                {{ el.status }}
+            </div>
+            <div class="col data">
+                {{ el.district }}
+            </div>
+            <div class="col data">
+                {{ el.address }}
+            </div>
+            <div class="col data">
+                {{ el.phone }}
+            </div>
+            <div class="col data">
+                <select id="inputState" class="form-control">
+                    <option value="" disabled selected hidden>Choose courier</option>
+                    <!-- % for courier in % -->
+                    <!-- TODO: courier select -->
+                    <option>courier 1</option>
+                    <option>courier 2</option>
+                    <!-- % endfor % -->
+                </select>
+            </div>
+            {% endfor %}
+            <!-- TODO: form handler -->
+        </div>
+    </form>
+    {% else %}
+    <div class="text-center container" style="font-size: 2.5em;">No one order yet</div>
+    {% endif %}
 </div>
 {% endblock %}

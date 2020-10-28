@@ -41,7 +41,7 @@
       </p>
     </div>
     <div class="container la">
-      <span class="basket">0</span>
+      <span>Cart: </span><span class="basket">0</span>
     </div>
   </section>
   <!-- end of text on top -->
@@ -49,6 +49,7 @@
   <div class="album py-5">
     <div class="container">
       <div class="row">
+        <!-- price is located on server, do you want to crack? Good luck -->
         {% for el in products %}
         <div class="col-md-3">
           <div class="card mb-4 shadow-sm">
@@ -66,7 +67,9 @@
               <p class="card-text text-break">{{ el.text }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary add-cart">Add to cart</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary add-cart" value="{{ el.tag }}"
+                          price="{{ el.price }}">Add to cart
+                  </button>
                   <!-- TODO: local storage for cart -->
                   <button type="button" class="btn btn-sm btn-outline-secondary remove-cart">Remove</button>
                   <!-- TODO: check for 0 values of product, make button unavaible -->
@@ -76,7 +79,6 @@
             </div>
           </div>
         </div>
-
 
         {% endfor %}
 
@@ -88,4 +90,5 @@
 
 <script type="text/javascript" src="{% static 'main/js/shopping_cart.js' %}">
 </script>
+
 {% endblock %}

@@ -1,0 +1,44 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% if orders %}
+        <div class="col data d-title">
+            address
+        </div>
+        <div class="col data d-title">
+            phone
+        </div>
+        <div class="col data d-title">
+            current status
+        </div>
+        <div class="col data d-title">
+            details
+        </div>
+        {% for el in orders %}
+        <div class="w-100"></div>
+        <div class="col data">
+            {{ el.address }}
+        </div>
+        <div class="col data">
+            {{ el.phone }}
+        </div>
+        <div class="col data">
+            {{ el.status }}
+        </div>
+        <div class="col data">
+            <a href="{% url 'courier' %}/{{ el.id }}">View details</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="text-center container" style="font-size: 2.5em;">No one order yet</div>
+{% endif %}
+{% endblock %}

@@ -56,7 +56,8 @@
             <a href="{% url 'home' %}" class="nav-link text-white mb-3">Home</a>
           </div>
         </a>
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
@@ -64,6 +65,15 @@
     <!-- end of navigation -->
 
   </header>
+  <a href="{% url 'logout' %}" style="
+margin: 10px;
+padding: 5px;
+background-color:#333b3f;
+border: 1px solid gray;
+border-radius: 3px;
+text-align:right;
+color:lightgray;
+">Log in/out</a>
   {% block content%}{% endblock %}
 </body>
 
