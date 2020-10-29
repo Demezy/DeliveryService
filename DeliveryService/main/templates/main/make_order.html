@@ -1,0 +1,35 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block content %}
+<div class="text-center">
+    <div class="container" style="max-width: 70vw"><img class="img-fluid rounded" src="
+              {% if product.img %}
+                {% static 'main/img/' %}{{ product.img }}
+              {% else %}
+                {% static 'main/img/NoImageAvailable.png' %}
+              {% endif %}
+              " alt="Image is not avaible">
+    </div>
+
+    <p class="card-title text-center h4 text-break">{{ product.title }}</p>
+    <p class="card-text text-break">{{ product.text }}</p>
+    <small class="text-muted">Count: {{ product.count }}</small>
+</div>
+
+<form action="" method="POST" class="container text-center">
+    {% csrf_token %}
+    <input type="tel" required name="phone" placeholder="telephone" minlength="8" maxlength="18"/>
+    <input type="text" required name="address" placeholder="address">
+    <input type="number" required name="count" default="1" min="1" max="{{product.count}}" placeholder="How much?">
+    <button class="btn btn-success" type="submit">Submit</button>
+</form>
+{% endblock %}
