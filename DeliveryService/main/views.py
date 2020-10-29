@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Product, Order, User
 from .decorators import check_session, login_required
 from hashlib import sha256
+from .district_handler import check_location
 
 # constants
 COMPANY = "Delivery Service"
@@ -43,6 +44,7 @@ def login(request):
         if request.method == 'GET':
             params = {
                 'auth': request.session['auth'],
+                "title": "login",
             }
             return render(request, 'main/login.html', params)
         else:
@@ -55,7 +57,8 @@ def login(request):
             except Exception as e:
                 # print(e)
                 params = {
-                    'error': 'Failed to authenticate'
+                    'error': 'Failed to authenticate',
+                    "title": "login",
                 }
                 return render(request, 'main/login.html', params)
             else:
@@ -66,6 +69,7 @@ def login(request):
                 else:
                     params = {
                         'error': 'Failed to authenticate',
+                        "title": "login",
                     }
                     return render(request, 'main/login.html', params)
     except Exception:
@@ -74,7 +78,7 @@ def login(request):
 
 @check_session
 def error(request, error_msg=None):
-    return render(request, "main/error.html", {"COMPANY": COMPANY, "error_msg": error_msg})
+    return render(request, "main/error.html", {"COMPANY": COMPANY, "title": "Error", "error_msg": error_msg})
 
 
 @check_session
@@ -99,6 +103,7 @@ def manager(request, number):
 
     return render(request, "main/manage_page.html",
                   {"COMPANY": COMPANY,
+                   "title": "Manage",
                    "orders": Order.objects.all(),
                    "couriers": User.objects.filter(user_type=0),
                    "STATUSES": Order.STATUS_CHOICES
@@ -138,7 +143,7 @@ def courier(request, user, number):
 
 @check_session
 @login_required
-def show_page(user: User, request, number=None):
+def show_page(request, user: User, number=None):
     try:
         if user.user_type == 1:
             return manager(request, number)
@@ -147,5 +152,35 @@ def show_page(user: User, request, number=None):
         else:
             return error(request, "The administrator assigned you the wrong user type. ")
 
+    except Exception:
+        return error(request)
+
+
+@check_session
+def make_order(request, product=None):
+    try:
+        product_obj = Product.objects.get(tag=product)
+        if product is None or product_obj is None:
+            redirect("shop_page")
+
+        if request.method == "POST":
+            current = Order()
+            # print(request.POST)
+            current.phone = request.POST.get("phone")
+            current.address = request.POST.get("address")
+            current.district = check_location(request.POST.get("address"))
+
+            if product_obj.count < int(request.POST.get("count")):
+                return error(request, "Sorry, but you choose too much products")
+            else:
+                product_obj.count -= int(request.POST.get("count"))
+                product_obj.save()
+                current.save()
+
+        return render(request, "main/make_order.html", {
+            "COMPANY": COMPANY,
+            "title": "Buy",
+            "product": Product.objects.get(tag=product)
+        })
     except Exception:
         return error(request)
