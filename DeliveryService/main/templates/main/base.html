@@ -65,15 +65,9 @@
     <!-- end of navigation -->
 
   </header>
-  <a href="{% url 'logout' %}" style="
-margin: 10px;
-padding: 5px;
-background-color:#333b3f;
-border: 1px solid gray;
-border-radius: 3px;
-text-align:right;
-color:lightgray;
-">Log in/out</a>
+
+  <a href="{% url 'logout' %}" class="btn btn-secondary" style="position: absolute">Log in/out</a>
+
   {% block content%}{% endblock %}
 </body>
 

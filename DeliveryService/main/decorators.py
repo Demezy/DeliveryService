@@ -1,8 +1,5 @@
-import datetime
 from django.shortcuts import redirect
 from .models import User
-
-entry_count = {}
 
 
 def check_session(func):
@@ -26,7 +23,7 @@ def login_required(func):
                 args[0].session['auth'] = 0
                 return redirect('login')
             else:
-                return func(user, *args, **kwargs)
+                return func(args[0], user, *args[1::], **kwargs)
         return redirect('login')
 
     return decorator
